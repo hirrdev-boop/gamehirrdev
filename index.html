@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎮 Tebak Angka — Game Seru by Thohir</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Inter', sans-serif;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(2px);
+            border-radius: 64px;
+            padding: 20px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+        }
+
+        .game-card {
+            background: #0f212e;
+            border-radius: 48px;
+            padding: 32px 28px;
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 20px 30px -10px black;
+            border: 1px solid rgba(255,215,0,0.3);
+            transition: all 0.2s;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sub {
+            color: #9bb7c9;
+            margin-top: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #ffb34760;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .range-info {
+            background: #07131c;
+            border-radius: 100px;
+            padding: 12px 20px;
+            margin: 25px 0 20px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #FFD966;
+            border: 1px solid #2c4b5e;
+        }
+
+        .guess-area {
+            background: #07131c;
+            border-radius: 60px;
+            padding: 8px 15px;
+            display: flex;
+            gap: 12px;
+            margin: 15px 0 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        input {
+            flex: 2;
+            min-width: 150px;
+            background: #1e3a4a;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 60px;
+            color: #ffefcf;
+            outline: none;
+            font-family: monospace;
+            letter-spacing: 1px;
+            transition: 0.15s;
+            border: 1px solid #ffb34750;
+        }
+
+        input:focus {
+            border-color: #ffb347;
+            box-shadow: 0 0 10px #ffb34780;
+        }
+
+        button {
+            background: #ffb347;
+            border: none;
+            padding: 0 28px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #0f212e;
+            transition: 0.1s linear;
+            box-shadow: 0 4px 0 #a45f1a;
+            font-family: inherit;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #a45f1a;
+        }
+
+        .message {
+            background: #07131cbd;
+            border-radius: 40px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            color: #FFE5B4;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .attempt {
+            background: #1c3d3f;
+            border-radius: 60px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+        }
+
+        .attempt span {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #FFC857;
+        }
+
+        .reset-btn {
+            background: #2c5a6e;
+            box-shadow: 0 4px 0 #14303d;
+            color: white;
+            margin-top: 10px;
+            padding: 12px 24px;
+            width: 100%;
+        }
+
+        .footer {
+            font-size: 0.75rem;
+            color: #6f8e9e;
+            margin-top: 25px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .developer {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #ffb347cc;
+            background: #07131c60;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 40px;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 480px) {
+            .game-card { padding: 24px 18px; }
+            button { padding: 0 20px; font-size: 1rem; }
+            input { padding: 12px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="game-card">
+        <h1>
+            🎲 TEBAK ANGKA
+        </h1>
+        <div class="sub">★ logika & keberuntungan ★</div>
+
+        <div class="range-info">
+            <span>🔻 1</span>
+            <span>🎯 target rahasia</span>
+            <span>100 🔺</span>
+        </div>
+
+        <div class="guess-area">
+            <input type="number" id="guessInput" placeholder="Masukkan angka" min="1" max="100">
+            <button id="guessBtn">✨ TEBAK ✨</button>
+        </div>
+
+        <div class="message" id="messageBox">
+            💡 Mulai tebak angka antara 1 - 100
+        </div>
+
+        <div class="attempt">
+            📊 Percobaan : <span id="attemptCount">0</span>
+        </div>
+
+        <button id="resetBtn" class="reset-btn">🔄  GAME BARU  🔄</button>
+        
+        <div class="footer">
+            <div>⚡ bebas judi · murni keseruan tebak angka ⚡</div>
+            <div class="developer">
+                🎮 Developer: <strong style="color:#FFD966;">THOHIR</strong> — Creator of this game
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- STATE GAME ----------
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+        let gameOver = false;
+
+        // DOM elements
+        const guessInput = document.getElementById('guessInput');
+        const guessBtn = document.getElementById('guessBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const messageBox = document.getElementById('messageBox');
+        const attemptSpan = document.getElementById('attemptCount');
+
+        // Helper: update tampilan percobaan
+        function updateAttemptDisplay() {
+            attemptSpan.innerText = attempts;
+        }
+
+        // Helper: pesan dengan gaya emoji
+        function setMessage(text, isError = false, isWin = false) {
+            let emoji = "🔍";
+            if (isWin) emoji = "🏆✨";
+            else if (isError) emoji = "⚠️";
+            else if (text.includes("terlalu besar")) emoji = "📈";
+            else if (text.includes("terlalu kecil")) emoji = "📉";
+            messageBox.innerHTML = `${emoji} ${text}`;
+        }
+
+        // Fungsi tebak angka
+        function handleGuess() {
+            if (gameOver) {
+                setMessage("🎯 Permainan selesai! Tekan 'GAME BARU' untuk lanjut bermain.", false);
+                return;
+            }
+
+            let rawValue = guessInput.value.trim();
+            if (rawValue === "") {
+                setMessage("❌ Masukkan angka dulu ya!", true);
+                return;
+            }
+
+            let guess = Number(rawValue);
+            if (isNaN(guess) || !Number.isInteger(guess) || guess < 1 || guess > 100) {
+                setMessage("❌ Tebakan harus angka BULAT antara 1 - 100!", true);
+                guessInput.value = "";
+                return;
+            }
+
+            // valid lolos
+            attempts++;
+            updateAttemptDisplay();
+
+            if (guess === secretNumber) {
+                // MENANG!
+                gameOver = true;
+                setMessage(`🎉🎉 SELAMAT! Angka ${secretNumber} benar! 🎉🎉 (Total ${attempts} percobaan)`, false, true);
+                guessBtn.disabled = true;
+                guessBtn.style.opacity = "0.6";
+                guessBtn.style.cursor = "default";
+                messageBox.style.background = "#2d5a3fbd";
+                messageBox.style.border = "1px solid gold";
+            } 
+            else if (guess < secretNumber) {
+                setMessage(`📉 Tebakan ${guess} terlalu KECIL. Coba angka yang lebih besar!`);
+            } 
+            else {
+                setMessage(`📈 Tebakan ${guess} terlalu BESAR. Coba angka yang lebih kecil!`);
+            }
+
+            // kosongkan input agar fresh
+            guessInput.value = "";
+            guessInput.focus();
+
+            // jika game over, kita disable input
+            if (gameOver) {
+                guessInput.disabled = true;
+            }
+        }
+
+        // RESET penuh game
+        function resetGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameOver = false;
+            updateAttemptDisplay();
+            guessInput.disabled = false;
+            guessBtn.disabled = false;
+            guessBtn.style.opacity = "1";
+            guessInput.value = "";
+            messageBox.style.background = "#07131cbd";
+            messageBox.style.border = "none";
+            setMessage("🔄 Game direset! Tebak angka baru antara 1 - 100. 🔥");
+            guessInput.focus();
+            console.log("(rahasia reset: ", secretNumber, ")");
+        }
+
+        // event listener
+        guessBtn.addEventListener('click', handleGuess);
+        resetBtn.addEventListener('click', resetGame);
+        guessInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleGuess();
+            }
+        });
+
+        // inisialisasi
+        updateAttemptDisplay();
+        guessInput.focus();
+    })();
+</script>
+</body>
+</html>
